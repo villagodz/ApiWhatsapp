@@ -5,7 +5,6 @@ import { conectarWhatsappApi } from './config/whatsapp.config';
 import whatsappRoute from './routes/whatsapp.routes';
 
 dotenv.config();
-
 const app: Application = express();
 const PORT: number = parseInt(process.env.PORT || '3000');
 
@@ -20,5 +19,5 @@ conectarWhatsappApi();
 app.use('/api/whatsapp', whatsappRoute);
 
 app.listen(PORT, () => {
-    console.log(`Servido corriendo en http://localhost:${PORT}`);
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });

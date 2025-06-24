@@ -32,6 +32,11 @@ export const sendWhatsAppMessage = async (message: WhatsAppMessage) => {
       `${WHATSAPP_CONFIG.apiUrl}${endpoint}`,
       payload
     );
+
+    console.log('Respuesta de Waboxapp:', {
+      status: response.status,
+      data: response.data
+    });
     
     return {
       success: true,
@@ -39,7 +44,19 @@ export const sendWhatsAppMessage = async (message: WhatsAppMessage) => {
       status: response.data?.success ? 'enviado' : 'fallido'
     };
   } catch (error: any) {
-    const errorMessage = error.response?.data?.message || error.message;
-    throw new Error(`Error en WhatsApp API (${error.response?.status}): ${errorMessage}`);
+    // Registra el error COMPLETO
+    console.error('Error detallado:', {
+      status: error.response?.status,
+      data: error.response?.data,
+      config: {
+        url: error.config?.url,
+        data: error.config?.data
+      }
+    });
+    const errorMessage = error.response?.data?.error || 
+                        error.response?.data?.message || 
+                        error.message;
+    
+    throw new Error(`WhatsApp API: ${errorMessage}`);
   }
 };
