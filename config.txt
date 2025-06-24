@@ -1,0 +1,14 @@
+*---API WHATSAPP
+User: Villagodz
+password:Seba#API845261
+API KEY: 9e5f3061cdccc9acd60b94b579ad91cb-52776270-ab78-4730-8c10-804f329bb60f
+
+*--Como utilizar el API
+
+// ESTA PETICIÓN ES PARA 
+{
+  "to": "595981134876",
+  "url": "http://tmpfiles.org/dl/1396316/waboxapp-api-v3.pdf",
+  "caption": "Documento de prueba desde sistema",
+  "filename": "reporte_sistema.pdf"
+}

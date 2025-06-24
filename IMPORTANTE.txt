@@ -1,0 +1,108 @@
+PROBLEMA SOLO LEE ARCHIVOS PUBLICOS
+
+Problema fundamental
+Waboxapp API requiere URLs públicas accesibles desde internet
+Tu ruta local c:/Seba/... solo existe en tu máquina y no es accesible para los servidores de Waboxapp.
+
+Solución: Servir los archivos localmente vía web
+Debes crear un servidor web local que exponga tus archivos a través de HTTP:
+
+Crear un servidor de archivos estáticos
+
+typescript
+// En server.ts
+import express from 'express';
+import path from 'path';
+
+// Agrega esto después de los middlewares
+app.use('/archivos', express.static(path.join(__dirname, 'public')));
+Mover tus documentos a una carpeta pública
+
+Crea una carpeta public en la raíz de tu proyecto
+
+Guarda los archivos aquí (ej: public/documentos/reporte.pdf)
+
+Usa rutas relativas en vez de absolutas
+
+Generar URLs válidas
+
+javascript
+// En tu sistema de gestión
+const baseUrl = 'http://tu-server.com:3000'; // Cambiar en producción
+const filePath = '/documentos/reporte.pdf';
+const publicUrl = `${baseUrl}/archivos${filePath}`;
+Flujo completo para enviar documentos
+Almacenar el archivo
+Guarda el reporte generado en ./public/documentos/reporte_2024.pdf
+
+Construir URL pública
+
+javascript
+const publicUrl = `http://localhost:3000/archivos/documentos/reporte_2024.pdf`;
+Enviar a WhatsApp API
+
+json
+POST /api/whatsapp/document
+{
+  "to": "595985735146",
+  "url": "http://localhost:3000/archivos/documentos/reporte_2024.pdf",
+  "caption": "Reporte mensual",
+  "filename": "reporte_mayo_2024.pdf"
+}
+Configuración para producción
+Cuando estés en un servidor real:
+
+Usa un dominio real en vez de localhost
+
+Configura HTTPS (certificado SSL)
+
+Usa variables de entorno para la URL base:
+
+typescript
+// En tu .env
+APP_URL=https://tudominio.com
+APP_PORT=443
+
+// En tu código
+const baseUrl = process.env.APP_URL || 'http://localhost:3000';
+Alternativa profesional: Servicio de almacenamiento en la nube
+Para sistemas de producción reales, recomiendo:
+
+Diagram
+Code
+
+
+
+
+
+
+
+
+
+Ejemplo con AWS S3:
+
+javascript
+// Después de subir a S3
+const publicUrl = `https://tu-bucket.s3.amazonaws.com/reportes/reporte_2024.pdf`;
+Corrección final en tu código
+Asegúrate de tener el endpoint corregido en tu servicio:
+
+typescript
+// whatsapp.service.ts
+const endpoint = message.type === 'text' 
+  ? '/chat' 
+  : '/document/send'; // ¡Corregido!
+Prueba local con ngrok (temporal)
+Si necesitas pruebas externas sin subir a producción:
+
+Instala ngrok: npm install -g ngrok
+
+Ejecuta: ngrok http 3000
+
+Usa la URL HTTPS que proporciona ngrok:
+
+json
+{
+  "url": "https://a1b2-2800-200-1234-1234-1234.ngrok-free.app/archivos/reporte.pdf"
+}
+Importante: Esto es solo para pruebas. Para producción real necesitas una solución permanente con dominio propio y SSL.
